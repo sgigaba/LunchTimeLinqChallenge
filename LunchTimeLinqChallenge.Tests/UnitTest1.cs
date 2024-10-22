@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace LunchTimeLinqChallenge.Tests;
 
 public class UnitTest1
@@ -31,6 +33,17 @@ public static class ChallengeSolution
 
     public static IEnumerable<string> Two(string names)
     {
-        return Enumerable.Empty<string>();
+        // TODO: Format date in on go
+        var orderedNames = names.Split(';').OrderBy((date) => 
+            new {
+                    date = new DateOnly(
+                            int.Parse((date.Split(',')[1].Trim()).Split('/')[2]),
+                            int.Parse((date.Split(',')[1].Trim()).Split('/')[1]),
+                            int.Parse((date.Split(',')[1].Trim()).Split('/')[0]))
+                }
+                .date)
+                .Select((name) => name.Trim());
+
+        return orderedNames;
     }
 }
