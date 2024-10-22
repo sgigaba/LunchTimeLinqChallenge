@@ -7,8 +7,6 @@ public class UnitTest1
     {
         string listOfNames = "Davis, Clyne, Fonte, Hooiveld, Shaw, Davis, Schneiderlin, Cork, Lallana, Rodriguez, Lambert";
         string expected = "1. Davis,2. Clyne,3. Fonte,4. Hooiveld,5. Shaw,6. Davis,7. Schneiderlin,8. Cork,9. Lallana,10. Rodriguez,11. Lambert"; 
-        
-        listOfNames = string.Join("",listOfNames.Split(' ').Select((name, index) => index + 1 + ". " + name));
 
         Assert.Equal(expected, ChallengeSolution.One(listOfNames));
     }
@@ -27,6 +25,7 @@ public static class ChallengeSolution
 {
     public static string One(string names)
     {
+        names = string.Join("", names.Split(' ').Select((name, index) => index + 1 + ". " + name));
         return names;
     }
     public static IEnumerable<string> Two(string names)
