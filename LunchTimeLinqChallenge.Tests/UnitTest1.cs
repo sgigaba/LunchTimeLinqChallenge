@@ -28,6 +28,7 @@ public static class ChallengeSolution
         names = string.Join("", names.Split(' ').Select((name, index) => $"{index + 1}. {name}"));
         return names;
     }
+
     public static IEnumerable<string> Two(string names)
     {
         return Enumerable.Empty<string>();
