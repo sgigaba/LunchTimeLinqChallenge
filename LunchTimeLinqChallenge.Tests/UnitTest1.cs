@@ -21,6 +21,15 @@ public class UnitTest1
         
         Assert.Equal("Kelvin Davis, 29/09/1976", first);
     }
+
+    [Fact]
+    public void Test3()
+    {
+        var songTimes = "4:12,2:43,3:51,4:29,3:24,3:14,4:46,3:25,4:52,3:27"; 
+        var expectedAlbumLength = 38.4;
+        
+        Assert.Equal(expectedAlbumLength, ChallengeSolution.Three(songTimes));
+    }
 }
 
 public static class ChallengeSolution
@@ -33,17 +42,19 @@ public static class ChallengeSolution
 
     public static IEnumerable<string> Two(string names)
     {
-        // TODO: Format date in on go
         var orderedNames = names.Split(';').OrderBy((date) => 
             new {
-                    date = new DateOnly(
-                            int.Parse((date.Split(',')[1].Trim()).Split('/')[2]),
-                            int.Parse((date.Split(',')[1].Trim()).Split('/')[1]),
-                            int.Parse((date.Split(',')[1].Trim()).Split('/')[0]))
+                    date = DateTime.ParseExact(date.Split(',')[1].Trim(), "dd/MM/yyyy", null),
                 }
                 .date)
                 .Select((name) => name.Trim());
 
         return orderedNames;
     }
+
+
+    public static int Three(string songTimes)
+    {
+        return 0;
+    } 
 }
