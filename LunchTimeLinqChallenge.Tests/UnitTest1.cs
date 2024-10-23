@@ -26,9 +26,9 @@ public class UnitTest1
     public void Test3()
     {
         var songTimes = "4:12,2:43,3:51,4:29,3:24,3:14,4:46,3:25,4:52,3:27"; 
-        var expectedAlbumLength = 38.4;
+        var expectedAlbumLength = 38.38;
         
-        Assert.Equal(expectedAlbumLength, ChallengeSolution.Three(songTimes));
+        Assert.Equal(expectedAlbumLength, Math.Round(ChallengeSolution.Three(songTimes), 2));
     }
 }
 
@@ -44,7 +44,7 @@ public static class ChallengeSolution
     {
         var orderedNames = names.Split(';').OrderBy((date) => 
             new {
-                    date = DateTime.ParseExact(date.Split(',')[1].Trim(), "dd/MM/yyyy", null),
+                    date = DateTime.ParseExact(date.Split(',')[1].Trim(), "dd/MM/yyyy", null)
                 }
                 .date)
                 .Select((name) => name.Trim());
@@ -53,8 +53,9 @@ public static class ChallengeSolution
     }
 
 
-    public static int Three(string songTimes)
+    public static double Three(string songTimes)
     {
-        return 0;
+        var albumLength = songTimes.Split(',').Sum((time) => double.Parse(time.Split(":")[0]) + (double.Parse(time.Split(":")[1]) / 60));
+        return albumLength;
     } 
 }
