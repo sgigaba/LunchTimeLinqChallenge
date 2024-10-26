@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 
 namespace LunchTimeLinqChallenge.Tests;
 
@@ -30,6 +31,24 @@ public class UnitTest1
         
         Assert.Equal(expectedAlbumLength, Math.Round(ChallengeSolution.Three(songTimes), 2));
     }
+
+    [Fact]
+    public void Test4()
+    {
+        // plot points for 3 by 3 grid
+        var expectedGridPoints = new string[]{"0,0", "0,1", "0,2", "1,0", "1,1", "1,2", "2,0", "2,1", "2,2"}.ToList();
+
+        var actualGridPoints = ChallengeSolution.Four(3);
+        Assert.True(CompareLists(expectedGridPoints, actualGridPoints));    
+    }
+
+    static bool CompareLists(List<string> list1, IEnumerable<string> list2)
+    {
+        if (list1.Count != list2.Count())
+            return false;
+        
+        return !list1.Except(list2).Any() || list2.Except(list1).Any();
+    }
 }
 
 public static class ChallengeSolution
@@ -52,10 +71,36 @@ public static class ChallengeSolution
         return orderedNames;
     }
 
-
     public static double Three(string songTimes)
     {
+        // TODO: try with TimeSpan.FromMinutes
         var albumLength = songTimes.Split(',').Sum((time) => double.Parse(time.Split(":")[0]) + (double.Parse(time.Split(":")[1]) / 60));
         return albumLength;
     } 
+
+    public static IEnumerable<string> Four(int square)
+    { 
+        /*List<String> values = new List<String>();
+
+        //       x,y    x,y    x,y
+        // 0 -> (0,0), (0,1), (0,2) 
+        // 1 -> (1,0), (1,1), (1,2)
+        // 2 -> (2,0), (2,1), (2,2)
+
+        for (int i = 0; i <= 2; i++)
+        {
+            for (int y = 0; y <= 2; y++)
+            {
+                values.Add($"{i}, {y}");            
+            }
+        }
+            Translating the above into a linq query
+        */
+
+        var result = Enumerable.Range(0, square).SelectMany((point) => Enumerable.Range(0, square)
+                               .Select(val => $"{point},{val}")
+                               .ToList());
+
+        return result;
+    }
 }
