@@ -28,8 +28,9 @@ public class UnitTest1
     {
         var songTimes = "4:12,2:43,3:51,4:29,3:24,3:14,4:46,3:25,4:52,3:27"; 
         var expectedAlbumLength = 38.38;
+        var actualLength = ChallengeSolution.Three(songTimes);
         
-        Assert.Equal(expectedAlbumLength, Math.Round(ChallengeSolution.Three(songTimes), 2));
+        Assert.Equal(expectedAlbumLength, actualLength);
     }
 
     [Fact]
@@ -42,7 +43,37 @@ public class UnitTest1
         Assert.True(CompareLists(expectedGridPoints, actualGridPoints));    
     }
 
-    static bool CompareLists(List<string> list1, IEnumerable<string> list2)
+    [Fact]
+    public void Test5()
+    {
+        var lapTimes = "00:45,01:32,02:18,03:01,03:44,04:31,05:19,06:01,06:47,07:35";
+        var expectedTimes = new List<TimeOnly>(){
+           TimeOnly.ParseExact("45", "s", null),
+           TimeOnly.ParseExact("47", "s", null),
+           TimeOnly.ParseExact("46", "s", null),
+           TimeOnly.ParseExact("43", "s", null),
+           TimeOnly.ParseExact("43", "s", null),
+           TimeOnly.ParseExact("47", "s", null),
+           TimeOnly.ParseExact("48", "s", null),
+           TimeOnly.ParseExact("42", "s", null),
+           TimeOnly.ParseExact("46", "s", null),
+           TimeOnly.ParseExact("48", "s", null)
+        };
+
+        var times = ChallengeSolution.Five(lapTimes);
+        Assert.True(times.Equals(expectedTimes));
+    }
+
+    [Fact]
+    public void Test6()
+    {
+        var expectedResults = new List<int> {2,5,7,8,9,10,11,17,18};
+        var result = ChallengeSolution.Six("2,5,7-10,11,17-18");
+
+        Assert.True(CompareLists(expectedResults, result));
+    }
+
+    static bool CompareLists<T>(List<T> list1, IEnumerable<T> list2) 
     {
         if (list1.Count != list2.Count())
             return false;
@@ -74,7 +105,13 @@ public static class ChallengeSolution
     public static double Three(string songTimes)
     {
         // TODO: try with TimeSpan.FromMinutes
-        var albumLength = songTimes.Split(',').Sum((time) => double.Parse(time.Split(":")[0]) + (double.Parse(time.Split(":")[1]) / 60));
+
+        //var albumLength = songTimes.Split(',').Sum((time) => double.Parse(time.Split(":")[0]) + (double.Parse(time.Split(":")[1]) / 60));
+        var albumLength = TimeSpan.FromSeconds(songTimes.Split(',')
+            .Select((time) => TimeOnly.ParseExact(time, "m:s", null))
+            .Select((_) => _.Minute * 60 + _.Second)
+            .Sum()).TotalMinutes;
+
         return albumLength;
     } 
 
@@ -102,5 +139,42 @@ public static class ChallengeSolution
                                .ToList());
 
         return result;
+    }
+
+    public static List<TimeSpan> Five(string lapTimes)
+    {
+        var previousTime = "00:00";
+    /*  var lapDurations = lapTimes.Split(",");
+        var lapList = new List<TimeSpan>();
+        foreach(var x in lapDurations)
+        {
+            lapList.Add(TimeOnly.ParseExact(x,"m:s", null) - TimeOnly.ParseExact(lastValue,"m:s", null));
+            lastValue = x;
+        }
+    */
+        var times = lapTimes.Split(",").Select((currentTime) => 
+        {            
+            var distance = TimeOnly.ParseExact(currentTime,"m:s", null) - TimeOnly.ParseExact(previousTime,"m:s", null);
+            previousTime = currentTime;
+
+            return distance;
+        }).ToList();
+        
+        return times;
+    }
+
+    public static List<int> Six(string input)
+    {
+        return input.Split([','])
+            .Select(s => !s.Contains('-') ? new List<int>(){Int32.Parse(s)}
+            : Something(s)).SelectMany(x => x).ToList();
+    }
+
+    private static List<int> Something(string s)
+    {
+        var start = Math.Abs(Int32.Parse(s.Split('-')[0]));
+        var end =  Math.Abs(Int32.Parse(s.Split('-')[1]));
+
+        return Enumerable.Range(start, end - start + 1).ToList();
     }
 }

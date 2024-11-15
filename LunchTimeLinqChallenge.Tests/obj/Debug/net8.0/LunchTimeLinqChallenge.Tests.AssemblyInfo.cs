@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LunchTimeLinqChallenge.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0aafe5464415e1772c165688bfed08b40df12cd7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+51655660743d10d6e75c1aa5ad0f27628d01f1e8")]
 [assembly: System.Reflection.AssemblyProductAttribute("LunchTimeLinqChallenge.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LunchTimeLinqChallenge.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
